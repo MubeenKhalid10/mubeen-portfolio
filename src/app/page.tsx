@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Hero } from "@/components/home/Hero";
+import { InView } from "@/components/ui/InView";
 import { Container, Eyebrow } from "@/components/ui/Section";
 import { ProjectList } from "@/components/projects/ProjectList";
 import { getProjects } from "@/lib/projects";
@@ -22,7 +23,7 @@ export default async function HomePage() {
 
       <section aria-labelledby="work-title" className="border-t border-border py-16 sm:py-20">
         <Container>
-          <div className="mb-10 flex items-end justify-between gap-6">
+          <InView className="mb-10 flex items-end justify-between gap-6">
             <div>
               <Eyebrow>Selected work</Eyebrow>
               <h2 id="work-title" className="mt-3 font-serif text-3xl font-medium tracking-tight sm:text-4xl">
@@ -32,7 +33,7 @@ export default async function HomePage() {
             <Link href="/projects" className="inline-flex min-h-11 items-center text-sm underline decoration-accent decoration-2 underline-offset-4 hover:text-accent">
               All projects
             </Link>
-          </div>
+          </InView>
           <ProjectList projects={projects.slice(0, 3)} layout="rows" />
         </Container>
       </section>
@@ -43,7 +44,7 @@ export default async function HomePage() {
             <h2 id="now-title" className="font-mono text-xs uppercase tracking-[0.14em] text-muted md:pt-1.5">
               Currently
             </h2>
-            <div className="max-w-2xl">
+            <InView className="max-w-2xl">
               <p className="font-serif text-2xl font-medium">
                 {role.title}, {role.organization}
               </p>
@@ -52,13 +53,14 @@ export default async function HomePage() {
               <Link href="/about" className="mt-3 inline-flex min-h-11 items-center text-sm underline decoration-accent decoration-2 underline-offset-4 hover:text-accent">
                 More about me
               </Link>
-            </div>
+            </InView>
           </Container>
         </section>
       )}
 
       <section aria-labelledby="cta-title" className="border-t border-border py-16 sm:py-20">
         <Container>
+          <InView>
           <h2 id="cta-title" className="max-w-2xl font-serif text-3xl font-medium tracking-tight sm:text-4xl">
             Hiring for a full-stack or AI engineering role?
           </h2>
@@ -71,6 +73,7 @@ export default async function HomePage() {
           >
             Get in touch
           </Link>
+          </InView>
         </Container>
       </section>
     </>

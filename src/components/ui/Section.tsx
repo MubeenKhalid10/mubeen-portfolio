@@ -56,13 +56,14 @@ export function Row({
   label: string;
   children: ReactNode;
 }) {
+  const headingId = `${id ?? label.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-h`;
   return (
     <section
       id={id}
-      aria-label={label}
+      aria-labelledby={headingId}
       className="grid gap-4 border-b border-border py-10 md:grid-cols-[14rem_1fr] md:gap-12 md:py-12"
     >
-      <h2 className="font-mono text-xs uppercase tracking-[0.14em] text-muted md:pt-1.5">
+      <h2 id={headingId} className="font-mono text-xs uppercase tracking-[0.14em] text-muted md:pt-1.5">
         {label}
       </h2>
       <div>{children}</div>

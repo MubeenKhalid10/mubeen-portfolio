@@ -1,43 +1,71 @@
 @import "tailwindcss";
 
-/* Warm paper, near-black ink, one accent. Contrast: foreground 15:1,
-   muted 6.5:1, accent 5.2:1 on --background. */
+/* Light: warm paper, near-black ink, one accent.
+   Contrast on --background: foreground 16:1, muted 6.5:1, accent 5.5:1. */
 :root {
+  color-scheme: light;
   --background: #faf9f6;
+  --surface: #ffffff;
   --foreground: #1c1b19;
   --muted: #5d5a54;
   --subtle: #f2f0ea;
   --border: #dedbd3;
   --accent: #b83a0a;
+  --card-shadow: 0 1px 2px rgb(28 27 25 / 0.04), 0 10px 30px -18px rgb(28 27 25 / 0.25);
+  --card-shadow-hover: 0 2px 4px rgb(28 27 25 / 0.05), 0 22px 44px -20px rgb(28 27 25 / 0.32);
+}
+
+/* Dark: warm charcoal, not pure black; accent lifted for contrast.
+   Contrast on --background: foreground 15:1, muted 7:1, accent 6.8:1. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --background: #121110;
+  --surface: #1a1917;
+  --foreground: #ece8e1;
+  --muted: #a39e94;
+  --subtle: #211f1c;
+  --border: #2f2d29;
+  --accent: #f07a45;
+  --card-shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 12px 32px -18px rgb(0 0 0 / 0.7);
+  --card-shadow-hover: 0 2px 4px rgb(0 0 0 / 0.45), 0 24px 48px -20px rgb(0 0 0 / 0.8);
+}
+
+/* No saved choice: follow the operating system. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --background: #121110;
+    --surface: #1a1917;
+    --foreground: #ece8e1;
+    --muted: #a39e94;
+    --subtle: #211f1c;
+    --border: #2f2d29;
+    --accent: #f07a45;
+    --card-shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 12px 32px -18px rgb(0 0 0 / 0.7);
+    --card-shadow-hover: 0 2px 4px rgb(0 0 0 / 0.45), 0 24px 48px -20px rgb(0 0 0 / 0.8);
+  }
 }
 
 @theme inline {
   --color-background: var(--background);
+  --color-surface: var(--surface);
   --color-foreground: var(--foreground);
   --color-muted: var(--muted);
   --color-subtle: var(--subtle);
   --color-border: var(--border);
   --color-accent: var(--accent);
+  --shadow-card: var(--card-shadow);
+  --shadow-card-hover: var(--card-shadow-hover);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-serif: var(--font-source-serif);
+  --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 html {
   scroll-behavior: smooth;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
+  /* Keeps anchor targets and keyboard focus clear of the sticky 4rem header. */
+  scroll-padding-top: 5rem;
 }
 
 body {
@@ -52,10 +80,6 @@ h2 {
   text-wrap: balance;
 }
 
-section[id] {
-  scroll-margin-top: 5rem;
-}
-
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
@@ -63,5 +87,101 @@ section[id] {
 }
 
 ::selection {
-  background: #f3d3c4;
+  background: color-mix(in srgb, var(--accent) 25%, var(--background));
+}
+
+/* ---------- Motion ---------------------------------------------------- */
+
+/* One-time fade/rise on load, used by <Reveal>. Pure CSS, so it works
+   before hydration and never depends on JS to become visible. */
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+.reveal {
+  animation: reveal 0.7s var(--ease-out-expo) both;
+}
+
+/* Scroll-triggered fade/rise, used by <InView>. Content is hidden only
+   when JS is running (the `js` class is set by the head script), so it is
+   never lost if scripts fail. */
+.js .scroll-reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.7s var(--ease-out-expo),
+    transform 0.7s var(--ease-out-expo);
+}
+
+.js .scroll-reveal[data-inview] {
+  opacity: 1;
+  transform: none;
+}
+
+/* Slow ambient drift for the decorative glow behind page headers. */
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(4%, 6%, 0) scale(1.08);
+  }
+}
+
+.ambient-glow {
+  animation: drift 18s ease-in-out infinite;
+}
+
+/* Reading progress for case studies, driven by scroll position with no JS.
+   Browsers without scroll-driven animations simply don't show the bar. */
+.reading-progress {
+  display: none;
+}
+
+@supports (animation-timeline: scroll()) {
+  @keyframes grow {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
+  .reading-progress {
+    display: block;
+    transform-origin: 0 50%;
+    animation: grow linear both;
+    animation-timeline: scroll(root block);
+  }
+}
+
+/* Smooth cross-fade when the theme toggle uses the View Transitions API. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.35s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .reveal,
+  .ambient-glow {
+    animation: none;
+  }
+  .js .scroll-reveal {
+    opacity: 1;
+    transform: none;
+  }
 }

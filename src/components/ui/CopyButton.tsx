@@ -1,43 +1,50 @@
 "use client";
 
-import { Check, Copy } from "lucide-react";
+import { Check, Copy, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
-/** Copies `value` to the clipboard; the live region announces the result. */
+type State = "idle" | "copied" | "failed";
+
+/** Copies `value` to the clipboard; a sibling live region announces the result. */
 export function CopyButton({ value, label }: { value: string; label: string }) {
-  const [copied, setCopied] = useState(false);
+  const [state, setState] = useState<State>("idle");
 
   useEffect(() => {
-    if (!copied) return;
-    const t = setTimeout(() => setCopied(false), 2000);
+    if (state === "idle") return;
+    const t = setTimeout(() => setState("idle"), 2500);
     return () => clearTimeout(t);
-  }, [copied]);
+  }, [state]);
 
   async function copy() {
     try {
       await navigator.clipboard.writeText(value);
-      setCopied(true);
+      setState("copied");
     } catch {
-      /* clipboard unavailable: the mailto link still works */
+      setState("failed");
     }
   }
 
+  const Icon = state === "copied" ? Check : state === "failed" ? X : Copy;
+  const text = state === "copied" ? "Copied" : state === "failed" ? "Copy failed" : "Copy";
+
   return (
-    <button
-      type="button"
-      onClick={copy}
-      aria-label={label}
-      className="inline-flex min-h-11 items-center gap-2 rounded-sm border border-foreground/25 px-3 font-sans text-sm font-medium transition-colors hover:border-foreground hover:bg-subtle"
-    >
-      {copied ? (
-        <Check aria-hidden="true" className="size-4 text-accent" />
-      ) : (
-        <Copy aria-hidden="true" className="size-4" />
-      )}
-      {copied ? "Copied" : "Copy"}
+    <>
+      <button
+        type="button"
+        onClick={copy}
+        aria-label={label}
+        className="inline-flex min-h-11 items-center gap-2 rounded-sm border border-foreground/25 px-3 font-sans text-sm font-medium transition-colors hover:border-foreground hover:bg-subtle active:bg-border"
+      >
+        <Icon aria-hidden="true" className={`size-4 ${state === "idle" ? "" : "text-accent"}`} />
+        {text}
+      </button>
       <span role="status" className="sr-only">
-        {copied ? "Email address copied" : ""}
+        {state === "copied"
+          ? "Email address copied"
+          : state === "failed"
+            ? "Couldn't copy. Select the address and copy it manually."
+            : ""}
       </span>
-    </button>
+    </>
   );
 }

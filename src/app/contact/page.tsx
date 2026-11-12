@@ -33,7 +33,7 @@ export default function ContactPage() {
         <ul className="space-y-2 font-serif text-xl sm:text-3xl">
           {profile.email && (
             <li className="flex flex-wrap items-center gap-x-4 gap-y-1">
-              <a href={`mailto:${profile.email}`} className={`${linkClass} break-all`}>
+              <a href={`mailto:${profile.email}`} className={`${linkClass} min-w-0 [overflow-wrap:anywhere]`}>
                 <Mail aria-hidden="true" className="size-5 shrink-0" />
                 {profile.email}
               </a>

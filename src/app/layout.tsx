@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Source_Serif_4 } from "next/font/google";
 import "./globals.css";
 import { profile } from "@/content/profile";
@@ -25,12 +25,30 @@ export const metadata: Metadata = {
   openGraph: { siteName: profile.name, type: "website", locale: "en_US" },
 };
 
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#faf9f6" },
+    { media: "(prefers-color-scheme: dark)", color: "#121110" },
+  ],
+  colorScheme: "light dark",
+};
+
+/**
+ * Runs before first paint: applies a saved theme (no flash of the wrong
+ * theme) and marks JS as available so scroll reveals may start hidden.
+ */
+const headScript = `(function(){var d=document.documentElement;d.classList.add("js");try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")d.setAttribute("data-theme",t)}catch(e){}})()`;
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} ${sourceSerif.variable} h-full antialiased`}
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: headScript }} />
+      </head>
       <body className="flex min-h-full flex-col">
         <a
           href="#main"

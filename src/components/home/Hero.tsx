@@ -3,6 +3,7 @@ import { getResumeHref } from "@/lib/site";
 import { Container, Eyebrow } from "@/components/ui/Section";
 import { LinkButton } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
+import { Backdrop } from "@/components/ui/Backdrop";
 import { Typewriter } from "./Typewriter";
 import { Mail } from "lucide-react";
 import { GithubIcon, LinkedinIcon } from "@/components/ui/SocialIcons";
@@ -13,7 +14,8 @@ const socialClass =
 export function Hero() {
   const resume = getResumeHref();
   return (
-    <section aria-labelledby="hero-title" className="pb-16 pt-14 sm:pb-24 sm:pt-24">
+    <section aria-labelledby="hero-title" className="relative isolate pb-16 pt-14 sm:pb-24 sm:pt-24">
+      <Backdrop />
       <Container>
         <Reveal>
           <Eyebrow>Portfolio · Lahore, Pakistan</Eyebrow>
@@ -33,13 +35,13 @@ export function Hero() {
         </Reveal>
         <Reveal delay={0.15}>
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted">
-            {profile.intro} I&rsquo;m an AI Associate Engineer at Hashmaker
+            {profile.intro} I&rsquo;m an Associate AI Engineer at Hashmaker
             Solutions.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <LinkButton href="/projects">Explore My Work</LinkButton>
             {resume && (
-              <LinkButton href={resume} variant="secondary" target="_blank">
+              <LinkButton href={resume} variant="secondary" external prefetch={false}>
                 View Résumé
               </LinkButton>
             )}
@@ -76,9 +78,14 @@ export function Hero() {
             <p className="font-mono text-xs uppercase tracking-[0.14em] text-muted">
               Works with
             </p>
-            <ul className="mt-3 flex flex-wrap gap-x-7 gap-y-2 font-mono text-sm">
+            <ul className="mt-3 flex flex-wrap gap-2 font-mono text-sm">
               {profile.stack.map((t) => (
-                <li key={t}>{t}</li>
+                <li
+                  key={t}
+                  className="rounded-full border border-border bg-surface/70 px-3 py-1 backdrop-blur-sm transition-colors duration-200 hover:border-accent/50"
+                >
+                  {t}
+                </li>
               ))}
             </ul>
           </div>

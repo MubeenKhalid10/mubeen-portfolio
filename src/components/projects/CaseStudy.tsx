@@ -1,23 +1,29 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import type { Project } from "@/types/project";
 import { Container, Eyebrow } from "@/components/ui/Section";
 import { LinkButton } from "@/components/ui/Button";
 import { CoverImage, Diagram, ProjectGallery } from "./ProjectVisual";
+import { Reveal } from "@/components/ui/Reveal";
 import { StatusBadge } from "./StatusBadge";
+import { CaseStudyToc, CaseStudyTocMobile, type TocItem } from "./CaseStudyToc";
 
-const toc = [
-  ["overview", "Overview"],
-  ["problem", "Problem and solution"],
-  ["contribution", "My contribution"],
-  ["architecture", "Architecture"],
-  ["decisions", "Decisions"],
-  ["challenges", "Challenges"],
-  ["results", "Results and limits"],
-  ["lessons", "Lessons"],
-  ["visuals", "Screenshots"],
-  ["links", "Links"],
-] as const;
+function tocFor(p: Project): TocItem[] {
+  return [
+    { id: "overview", label: "Overview" },
+    { id: "problem", label: "Problem and solution" },
+    { id: "contribution", label: "My contribution" },
+    { id: "architecture", label: "Architecture" },
+    { id: "decisions", label: "Decisions" },
+    { id: "challenges", label: "Challenges" },
+    { id: "results", label: "Results and limits" },
+    { id: "lessons", label: "Lessons" },
+    // Only listed when the section is actually rendered.
+    ...(p.screenshots.length > 1 ? [{ id: "visuals", label: "Screenshots" }] : []),
+    { id: "links", label: "Links" },
+  ];
+}
 
 const linkClass =
   "underline decoration-accent decoration-2 underline-offset-4 hover:text-accent";
@@ -94,9 +100,16 @@ export function CaseStudy({
   project: Project;
   next: { slug: string; title: string };
 }) {
+  const toc = tocFor(p);
   return (
     <article className="pb-20">
+      {/* Scroll-linked reading progress (CSS only; hidden where unsupported). */}
+      <div
+        aria-hidden="true"
+        className="reading-progress fixed inset-x-0 top-0 z-50 h-0.5 bg-accent"
+      />
       <Container>
+        <Reveal>
         <header className="pb-10 pt-10 sm:pt-14">
           <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
             <Eyebrow>Case study · {p.context}</Eyebrow>
@@ -132,42 +145,18 @@ export function CaseStudy({
             <dd>{p.tags.join(" · ")}</dd>
           </dl>
         </header>
+        </Reveal>
 
-        <CoverImage project={p} />
+        <Reveal delay={0.12}>
+          <CoverImage project={p} />
+        </Reveal>
 
-        <details className="mt-10 border-y border-border lg:hidden">
-          <summary className="flex min-h-11 cursor-pointer items-center font-mono text-xs uppercase tracking-[0.14em] text-muted">
-            On this page
-          </summary>
-          <ul className="pb-3 text-sm">
-            {toc.map(([id, label]) => (
-              <li key={id}>
-                <a href={`#${id}`} className="block min-h-11 py-2.5 hover:text-accent">
-                  {label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </details>
+        <CaseStudyTocMobile items={toc} />
 
         <div className="grid gap-12 pt-12 lg:grid-cols-[12rem_1fr]">
-          <nav aria-label="On this page" className="hidden lg:block">
-            <p className="mb-3 font-mono text-xs uppercase tracking-[0.14em] text-muted">
-              On this page
-            </p>
-            <ul className="sticky top-24 space-y-2 border-l border-border text-sm">
-              {toc.map(([id, label]) => (
-                <li key={id}>
-                  <a
-                    href={`#${id}`}
-                    className="-ml-px block border-l border-transparent py-0.5 pl-4 text-muted hover:border-accent hover:text-foreground"
-                  >
-                    {label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
+          <div className="hidden lg:block">
+            <CaseStudyToc items={toc} />
+          </div>
 
           <div className="min-w-0">
             <Block id="overview" title="Project overview">
@@ -235,6 +224,7 @@ export function CaseStudy({
                     <li>
                       <a className={linkClass} href={p.links.demo} target="_blank" rel="noopener noreferrer">
                         Live demo
+                        <span className="sr-only"> (opens in a new tab)</span>
                       </a>
                     </li>
                   )}
@@ -242,6 +232,7 @@ export function CaseStudy({
                     <li>
                       <a className={linkClass} href={p.links.repo} target="_blank" rel="noopener noreferrer">
                         Source repository
+                        <span className="sr-only"> (opens in a new tab)</span>
                       </a>
                     </li>
                   )}
@@ -254,12 +245,23 @@ export function CaseStudy({
               {!p.links.repo && p.links.demo && (
                 <p className="text-sm text-muted">No public repository is linked.</p>
               )}
-              <p className="pt-2 text-sm">
-                <span className="text-muted">Next case study: </span>
-                <Link href={`/projects/${next.slug}`} className={`font-medium ${linkClass}`}>
-                  {next.title}
-                </Link>
-              </p>
+              <Link
+                href={`/projects/${next.slug}`}
+                className="group mt-6 flex items-center justify-between gap-4 rounded-xl border border-border bg-surface p-5 shadow-card transition-[transform,box-shadow,border-color] duration-500 ease-out-expo hover:-translate-y-0.5 hover:border-foreground/20 hover:shadow-card-hover sm:p-6"
+              >
+                <span>
+                  <span className="block font-mono text-xs uppercase tracking-[0.14em] text-muted">
+                    Next case study
+                  </span>
+                  <span className="mt-1 block font-serif text-2xl font-medium tracking-tight transition-colors group-hover:text-accent">
+                    {next.title}
+                  </span>
+                </span>
+                <ArrowRight
+                  aria-hidden="true"
+                  className="size-5 shrink-0 text-muted transition-[transform,color] duration-300 ease-out-expo group-hover:translate-x-1 group-hover:text-accent"
+                />
+              </Link>
             </Block>
           </div>
         </div>

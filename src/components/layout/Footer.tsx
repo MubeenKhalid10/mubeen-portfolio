@@ -27,6 +27,7 @@ export function Footer() {
               <a href={profile.github} target="_blank" rel="noopener noreferrer" className={linkClass}>
                 <GithubIcon className="size-4" />
                 GitHub
+                <span className="sr-only"> (opens in a new tab)</span>
                 <ArrowUpRight aria-hidden="true" className="size-3.5" />
               </a>
             </li>
@@ -35,6 +36,7 @@ export function Footer() {
                 <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" className={linkClass}>
                   <LinkedinIcon className="size-4" />
                   LinkedIn
+                  <span className="sr-only"> (opens in a new tab)</span>
                   <ArrowUpRight aria-hidden="true" className="size-3.5" />
                 </a>
               </li>

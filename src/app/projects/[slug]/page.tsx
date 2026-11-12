@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 import { notFound } from "next/navigation";
 import { projects } from "@/content/projects";
 import { getProject } from "@/lib/projects";
@@ -36,9 +37,10 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[slug
       <Container className="pt-8">
         <Link
           href="/projects"
-          className="inline-flex min-h-11 items-center text-sm text-muted underline-offset-4 hover:text-accent hover:underline"
+          className="inline-flex min-h-11 items-center gap-1.5 text-sm text-muted underline-offset-4 hover:text-accent hover:underline"
         >
-          ← All projects
+          <ArrowLeft aria-hidden="true" className="size-4" />
+          All projects
         </Link>
       </Container>
       <CaseStudy project={project} next={next} />

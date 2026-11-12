@@ -18,7 +18,7 @@ export const profile = {
    */
   resumeFile: "MUBEEN_KHALID.pdf",
   about: [
-    "I'm a Software Engineer with a BS in Software Engineering from COMSATS University Islamabad, Lahore Campus, and I work as an AI Associate Engineer at Hashmaker Solutions. I like building software that people can actually use, and I learn best by taking real problems from idea to a working system.",
+    "I'm a Software Engineer with a BS in Software Engineering from COMSATS University Islamabad, Lahore Campus, and I work as an Associate AI Engineer at Hashmaker Solutions. I like building software that people can actually use, and I learn best by taking real problems from idea to a working system.",
     "My work spans the stack: Next.js interfaces, Python and FastAPI services, PostgreSQL-backed data workflows, and AI integration including retrieval-augmented generation (RAG), semantic search, and real-time voice AI.",
     "I'm looking for full-stack engineering and AI / ML engineering roles where I can contribute, keep learning, and ship dependable software.",
   ],
@@ -29,7 +29,7 @@ export const profile = {
   },
   experience: [
     {
-      title: "AI Associate Engineer",
+      title: "Associate AI Engineer",
       organization: "Hashmaker Solutions",
       period: "August 2026 – Present",
       bullets: [

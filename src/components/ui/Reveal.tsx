@@ -1,25 +1,26 @@
-"use client";
+import type { CSSProperties, ReactNode } from "react";
+import { cn } from "@/lib/utils";
 
-import { motion, useReducedMotion } from "motion/react";
-import type { ReactNode } from "react";
-
-/** One-time fade/rise on mount. Disabled when the user prefers reduced motion. */
+/**
+ * One-time fade/rise on load, done in CSS (see `.reveal` in globals.css) so
+ * it needs no client JS, works before hydration, and is switched off by
+ * `prefers-reduced-motion`.
+ */
 export function Reveal({
   children,
   delay = 0,
+  className,
 }: {
   children: ReactNode;
   delay?: number;
+  className?: string;
 }) {
-  const reduce = useReducedMotion();
-  if (reduce) return <>{children}</>;
+  const style: CSSProperties | undefined = delay
+    ? { animationDelay: `${delay}s` }
+    : undefined;
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay, ease: "easeOut" }}
-    >
+    <div className={cn("reveal", className)} style={style}>
       {children}
-    </motion.div>
+    </div>
   );
 }

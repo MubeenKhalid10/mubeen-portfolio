@@ -8,7 +8,7 @@ import { pageMetadata } from "@/lib/metadata";
 export const metadata = pageMetadata({
   title: "About",
   description:
-    "Mubeen Khalid is a software engineer and AI Associate Engineer at Hashmaker Solutions with a BS in Software Engineering from COMSATS University.",
+    "Mubeen Khalid is a software engineer and Associate AI Engineer at Hashmaker Solutions with a BS in Software Engineering from COMSATS University.",
   path: "/about",
 });
 
@@ -31,7 +31,7 @@ export default function AboutPage() {
         </div>
         {resume && (
           <div className="mt-7">
-            <LinkButton href={resume} variant="secondary" target="_blank">
+            <LinkButton href={resume} variant="secondary" external prefetch={false}>
               View Résumé
             </LinkButton>
           </div>
@@ -71,23 +71,14 @@ export default function AboutPage() {
               <h3 className="font-medium">{g.title}</h3>
               <ul className="mt-3 divide-y divide-border border-y border-border">
                 {g.skills.map((s) => (
-                  <li
-                    key={s.name}
-                    className="flex flex-wrap items-baseline justify-between gap-x-6 py-2.5 text-[15px]"
-                  >
-                    <span>{s.name}</span>
-                    {s.evidence && (
-                      <span className="font-mono text-xs text-muted">{s.evidence}</span>
-                    )}
+                  <li key={s} className="py-2.5 text-[15px]">
+                    {s}
                   </li>
                 ))}
               </ul>
             </div>
           ))}
         </div>
-        <p className="mt-5 text-sm text-muted">
-          The note beside a skill names the project where it was used.
-        </p>
       </Row>
 
       <Row label="Certifications">

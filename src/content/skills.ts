@@ -1,46 +1,40 @@
-/**
- * `evidence` names the project(s) that demonstrate a skill. Leave it as ""
- * until a project is added for it; nothing is shown beside the skill then.
- */
-export type Skill = { name: string; evidence: string };
-
-export const skillGroups: { title: string; skills: Skill[] }[] = [
+export const skillGroups: { title: string; skills: string[] }[] = [
   {
     title: "Full-Stack Development",
     skills: [
-      { name: "Next.js", evidence: "ContentPulse" },
-      { name: "React & TypeScript", evidence: "ContentPulse" },
-      { name: "Python", evidence: "All projects" },
-      { name: "FastAPI", evidence: "ContentPulse" },
-      { name: "REST APIs", evidence: "ContentPulse, AI Call Agent" },
-      { name: "Node.js", evidence: "" },
+      "Next.js",
+      "React & TypeScript",
+      "Python",
+      "FastAPI",
+      "REST APIs",
+      "Node.js",
     ],
   },
   {
     title: "Data and Databases",
     skills: [
-      { name: "SQL & PostgreSQL", evidence: "LeadFlow, AI Call Agent" },
-      { name: "Data cleaning & processing", evidence: "LeadFlow" },
-      { name: "MongoDB, Firebase, Supabase", evidence: "" },
-      { name: "Pinecone (vector database)", evidence: "" },
+      "SQL & PostgreSQL",
+      "Data cleaning & processing",
+      "MongoDB, Firebase, Supabase",
+      "Pinecone (vector database)",
     ],
   },
   {
     title: "AI and Machine Learning",
     skills: [
-      { name: "RAG & LLM applications", evidence: "AI Call Agent" },
-      { name: "Real-time voice AI", evidence: "AI Call Agent" },
-      { name: "LangChain, embeddings", evidence: "" },
-      { name: "Scikit-learn, TensorFlow, PyTorch", evidence: "" },
+      "RAG & LLM applications",
+      "Real-time voice AI",
+      "LangChain, embeddings",
+      "Scikit-learn, TensorFlow, PyTorch",
     ],
   },
   {
     title: "Tools and Deployment",
     skills: [
-      { name: "Git & GitHub", evidence: "All projects" },
-      { name: "AWS (RDS, ECS Fargate, ALB)", evidence: "LeadFlow" },
-      { name: "Vercel", evidence: "ContentPulse, AI Call Agent" },
-      { name: "Twilio, Deepgram, Cartesia, Pipecat", evidence: "AI Call Agent" },
+      "Git & GitHub",
+      "AWS (RDS, ECS Fargate, ALB)",
+      "Vercel",
+      "Twilio, Deepgram, Cartesia, Pipecat",
     ],
   },
 ];
