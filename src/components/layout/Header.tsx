@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
@@ -65,9 +66,16 @@ export function Header({
               ? `${name} — home`
               : `${monogram}, ${name} — home`
           }
-          className="-ml-1 inline-flex min-h-11 items-center px-1 font-serif text-xl font-semibold tracking-tight"
+          className="-ml-1 inline-flex min-h-11 items-center px-1"
         >
-          {monogram}
+          <Image
+            src="/images/logo.png"
+            alt=""
+            width={190}
+            height={118}
+            preload
+            className="h-10 w-auto rounded-md"
+          />
         </Link>
 
         <nav aria-label="Primary" className="hidden sm:block">
